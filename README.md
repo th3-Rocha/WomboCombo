@@ -1,2 +1,2 @@
 # WomboComboGame
-jogo para a GameLab 24.1 tema "Reaching Higher"
+jogo para a GameLab 24.1 (Seconds) Jam tema "Reaching Higher"
