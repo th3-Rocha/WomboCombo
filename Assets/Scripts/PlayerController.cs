@@ -13,12 +13,15 @@ public class PlayerController : MonoBehaviour
     public AudioClip TpAudio;
     private AudioSource audioS;
     public GameObject tpEffect;
-
+    public GameObject playerPivotRotate;
+    public bool IsAtk;
+    private PlayerComboController playerComboController;
     void Start()
     {
         audioS = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
+        playerComboController = GetComponent<PlayerComboController>();
     }
 
     void Update()
@@ -30,18 +33,27 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1) && Time.time >= nextTeleportTime)
         {
+            playerComboController.lastAttackTime = 0;
             StoreMousePosition();
             TeleportPlayerToStoredPosition();
             nextTeleportTime = Time.time + teleportCooldown;
         }
-
+        if (IsAtk)
+        {
+            rb.useGravity = false;
+            animator.Play("atackingPlayer");
+        }
+        else
+        {
+            rb.useGravity = true;
+        }
      
         animator.SetBool("isGrounded", isGrounded);
     }
 
     void StoreMousePosition()
     {
-        animator.Play("PlayerTeleport");
+        animator.Play("PlayerTeleport"); 
         audioS.PlayOneShot(TpAudio);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -56,11 +68,12 @@ public class PlayerController : MonoBehaviour
     {
         if (targetPosition.x > 0)
         {
-            rb.MoveRotation(Quaternion.Euler(new Vector3(0, -90, 0)));
+            //playerPivotRotate.transform.Rotate(new Vector3(0, -90, 0));
+            playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
         }
         else if (targetPosition.x < 0)
         {
-            rb.MoveRotation(Quaternion.Euler(new Vector3(0, 90, 0)));
+            playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         }
         rb.MovePosition(targetPosition);
         rb.linearVelocity = Vector3.zero;
