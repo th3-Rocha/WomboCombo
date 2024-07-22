@@ -40,11 +40,13 @@ public class PlayerController : MonoBehaviour
         }
         if (IsAtk)
         {
-            rb.useGravity = false;
+            rb.useGravity = true;
             animator.Play("atackingPlayer");
+            animator.SetBool("atk", true);
         }
         else
         {
+            animator.SetBool("atk", false);
             rb.useGravity = true;
         }
      
@@ -53,22 +55,27 @@ public class PlayerController : MonoBehaviour
 
     void StoreMousePosition()
     {
-        animator.Play("PlayerTeleport"); 
+        animator.Play("PlayerTeleport");
         audioS.PlayOneShot(TpAudio);
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        // mascara pra ignorar o layer player
+        int layerMask = ~LayerMask.GetMask("Player");
+
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             targetPosition = hit.point;
         }
     }
 
+
     void TeleportPlayerToStoredPosition()
     {
         if (targetPosition.x > 0)
         {
-            //playerPivotRotate.transform.Rotate(new Vector3(0, -90, 0));
+            
             playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
         }
         else if (targetPosition.x < 0)
@@ -78,7 +85,6 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(targetPosition);
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        //GameObject instance = Instantiate(tpEffect, gameObject.transform.position, quaternion.identity);
         tpEffect.SetActive(true);
     }
 

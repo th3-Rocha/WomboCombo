@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WalkPath
+  m_Name: Light Rose
   m_Shader: {fileID: -6465566751694194690, guid: 415fba5bfeb3ac241962cd490d4f4936, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -70,13 +70,13 @@ Material:
     - _SrcBlend: 1
     - _Step: 0.61
     - _Surface: 0
-    - _Tichkeness: 0.2
+    - _Tichkeness: 0
     - _WorkflowMode: 0
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0}
+    - _BaseColor: {r: 1, g: 0.77254903, b: 0.79607844, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -23,20 +23,14 @@ public class RagDollBehaviour : MonoBehaviour
         foreach (Rigidbody rb in rigidbodies)
         {
             rb.isKinematic = !state;
-            rb.detectCollisions = state;
+            //rb.detectCollisions = state;
         }
     }
 
     public void Update()
     {
-        if (turnRagdoll)
-        {
-            SetRagdollState(true);
-        }
-        else
-        {
 
-            SetRagdollState(false);
-        }
+        SetRagdollState(turnRagdoll);
+   
     }
 }

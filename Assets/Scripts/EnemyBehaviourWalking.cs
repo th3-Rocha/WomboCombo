@@ -13,7 +13,9 @@ public class EnemyBehaviourWalking : MonoBehaviour
     public bool IsGrounded = false;
     private float speed;
     private Rigidbody rb;
-
+    public GameObject model;
+    public Material[] materials;
+    public LayerMask armLayer;
     // Maximum speed the enemy can move
     public float maxSpeed = 5.0f;
 
@@ -23,6 +25,11 @@ public class EnemyBehaviourWalking : MonoBehaviour
         SetRagdollState(turnRagdoll);
         capsuleCollider = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
+
+        // Set random material from materials array
+        SkinnedMeshRenderer skinnedMeshRenderer = model.GetComponent<SkinnedMeshRenderer>();
+        int randomMaterialIndex = UnityEngine.Random.Range(0, materials.Length);
+        skinnedMeshRenderer.material = materials[randomMaterialIndex];
 
         int randomValue = UnityEngine.Random.Range(1, 4);
 
@@ -45,15 +52,20 @@ public class EnemyBehaviourWalking : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (health < 0)
+        if (health <= 0)
         {
             KillEnemy();
         }
 
         if (!turnRagdoll)
         {
+            
             MoveForward();
             LimitVelocity();
+        }
+        else
+        {
+            SetRagdollState(turnRagdoll);
         }
     }
 
@@ -96,6 +108,11 @@ public class EnemyBehaviourWalking : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             IsGrounded = true;
+        }
+      
+        if (((1 << collision.gameObject.layer) & armLayer) != 0)
+        {
+            health = 0;
         }
     }
 }
