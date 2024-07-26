@@ -11,6 +11,7 @@ public class ATKControl : MonoBehaviour
     private float lastHitTime;
     public float cooldownDuration = 1f; // Cooldown duration in seconds
     public AudioSource atkHit;
+    public AudioSource atkMiss;
     void Start()
     {
         atkHit = GetComponent<AudioSource>();
@@ -38,12 +39,13 @@ public class ATKControl : MonoBehaviour
         {
             atkHit.pitch = Random.Range(1.25f, 2f);
             atkHit.mute = true;
-
+            atkMiss.mute = false;
 
         }
         else
         {
             atkHit.mute = false;
+            atkMiss.mute = true;
         }
     }
 

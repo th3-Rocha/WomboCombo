@@ -13,9 +13,11 @@ public class PlayerComboController : MonoBehaviour
     public bool IsAtack;
     public float enemyDetectionRadius = 5f;
     public LayerMask enemyLayerMask;
-
+    private PlayerController playerController;
+    public Transform NearbyEnemy;
     void Start()
     {
+        playerController = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -29,14 +31,16 @@ public class PlayerComboController : MonoBehaviour
             lastAttackTime = Time.time;
 
             Transform nearestEnemy = GetNearestEnemy();
+            NearbyEnemy = nearestEnemy;
             if (nearestEnemy != null)
             {
-
+                playerController.EnemieNearby = true;
                 RotateTowards(nearestEnemy.position);
 
             }
             else
             {
+                playerController.EnemieNearby = false;
                 RotateAttackPanelToCursor();
             }
         }
@@ -88,8 +92,15 @@ public class PlayerComboController : MonoBehaviour
                 nearestEnemy = enemy.transform;
             }
         }
-
+        
         return nearestEnemy;
+    }
+
+    public void RotateTowardsEnemy()
+    {
+
+        RotateTowards(NearbyEnemy.position);
+
     }
 
     private void RotateTowards(Vector3 targetPosition)

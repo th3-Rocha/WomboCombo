@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public GameObject playerPivotRotate;
     public bool IsAtk;
     private PlayerComboController playerComboController;
+
+    public bool EnemieNearby = false;
     void Start()
     {
         audioS = GetComponent<AudioSource>();
@@ -73,14 +75,25 @@ public class PlayerController : MonoBehaviour
 
     void TeleportPlayerToStoredPosition()
     {
-        if (targetPosition.x > 0)
+      
+
+        if (EnemieNearby)
         {
-            
-            playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
+            playerComboController.RotateTowardsEnemy();
+
+
         }
-        else if (targetPosition.x < 0)
+        else
         {
-            playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+            if (targetPosition.x > 0)
+            {
+
+                playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, -90, 0));
+            }
+            else if (targetPosition.x < 0)
+            {
+                playerPivotRotate.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+            }
         }
         rb.MovePosition(targetPosition);
         rb.linearVelocity = Vector3.zero;
