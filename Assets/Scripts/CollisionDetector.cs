@@ -16,7 +16,8 @@ public class CollisionDetector : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
-            atkControl.OnHitEnemy();
+            atkControl.OnHitEnemy(transform);
+         
         }
     }
 }

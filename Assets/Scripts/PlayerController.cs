@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public GameObject playerPivotRotate;
     public bool IsAtk;
     private PlayerComboController playerComboController;
+    public CamShake camShake;
 
     public bool EnemieNearby = false;
     void Start()
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
             StoreMousePosition();
             TeleportPlayerToStoredPosition();
             nextTeleportTime = Time.time + teleportCooldown;
+            camShake.TriggerSoftShake();
         }
         if (IsAtk)
         {

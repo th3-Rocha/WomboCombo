@@ -12,6 +12,9 @@ public class ATKControl : MonoBehaviour
     public float cooldownDuration = 1f; // Cooldown duration in seconds
     public AudioSource atkHit;
     public AudioSource atkMiss;
+    public CamShake camShake;
+    public GameObject HitInstanti;
+    public Vector3 hitOffesset = Vector3.zero;
     void Start()
     {
         atkHit = GetComponent<AudioSource>();
@@ -44,18 +47,26 @@ public class ATKControl : MonoBehaviour
         }
         else
         {
+         
+
             atkHit.mute = false;
             atkMiss.mute = true;
         }
     }
 
-    public void OnHitEnemy()
+    public void OnHitEnemy(Transform hitPosition = default(Transform))
     {
+    
+            Instantiate(HitInstanti, hitPosition.position + hitOffesset, hitPosition.rotation);
+        
+        camShake.TriggerSoftShake();
+        //instantiate something
         if (!isCooldown)
         {
             Debug.Log("Hit enemy!");
             lastHitTime = Time.time;
             isCooldown = true;
+           
         }
         else
         {
