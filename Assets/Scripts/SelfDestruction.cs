@@ -11,10 +11,4 @@ public class SelfDestruction : MonoBehaviour
         // Schedule the destruction of the GameObject after destroyDelay seconds
         Destroy(gameObject, destroyDelay);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // You can put other logic here if needed
-    }
 }

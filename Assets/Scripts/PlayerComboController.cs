@@ -78,7 +78,7 @@ public class PlayerComboController : MonoBehaviour
 
     private Transform GetNearestEnemy()
     {
-        Collider[] enemies = Physics.OverlapSphere(transform.position, enemyDetectionRadius, enemyLayerMask);
+        Collider[] enemies = Physics.OverlapSphere(transform.position + new Vector3(0,0.8f,0), enemyDetectionRadius, enemyLayerMask);
         Transform nearestEnemy = null;
         float closestDistanceSqr = Mathf.Infinity;
 

@@ -14,7 +14,7 @@ public class ATKControl : MonoBehaviour
     public AudioSource atkMiss;
     public CamShake camShake;
     public GameObject HitInstanti;
-    public Vector3 hitOffesset = Vector3.zero;
+    public HitHudCounter HitCounterHud;
     void Start()
     {
         atkHit = GetComponent<AudioSource>();
@@ -56,9 +56,10 @@ public class ATKControl : MonoBehaviour
 
     public void OnHitEnemy(Transform hitPosition = default(Transform))
     {
-    
-            Instantiate(HitInstanti, hitPosition.position + hitOffesset, hitPosition.rotation);
-        
+
+        GameObject instance = Instantiate(HitInstanti, hitPosition.position, hitPosition.rotation);
+        Destroy(instance, 0.5f);
+        HitCounterHud.UpdateHitCounterText();
         camShake.TriggerSoftShake();
         //instantiate something
         if (!isCooldown)

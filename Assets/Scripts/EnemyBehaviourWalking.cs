@@ -16,6 +16,7 @@ public class EnemyBehaviourWalking : MonoBehaviour
     public GameObject model;
     public Material[] materials;
     public LayerMask armLayer;
+    public LayerMask CarLayer;
     // Maximum speed the enemy can move
     public float maxSpeed = 5.0f;
 
@@ -31,14 +32,14 @@ public class EnemyBehaviourWalking : MonoBehaviour
         int randomMaterialIndex = UnityEngine.Random.Range(0, materials.Length);
         skinnedMeshRenderer.material = materials[randomMaterialIndex];
 
-        int randomValue = UnityEngine.Random.Range(1, 4);
+        int randomValue = UnityEngine.Random.Range(1, 6);
 
-        if (randomValue == 1)
+        if (randomValue == 1 || randomValue == 3)
         {
             animator.Play("walk1");
             speed = 1.0f;
         }
-        else if (randomValue == 2)
+        else if (randomValue == 2 )
         {
             animator.Play("walk2");
             speed = 0.3f;
@@ -48,6 +49,7 @@ public class EnemyBehaviourWalking : MonoBehaviour
             animator.Play("walk3");
             speed = 1.0f;
         }
+
     }
 
     void FixedUpdate()
@@ -87,7 +89,11 @@ public class EnemyBehaviourWalking : MonoBehaviour
     {
         // Disable the animator if enabling the ragdoll, enable it if disabling the ragdoll
         animator.enabled = !state;
-
+        
+        if (state)
+        {
+            rb.freezeRotation = false;
+        }
         // Enable or disable all rigidbodies and colliders
         foreach (Rigidbody rb in rigidbodies)
         {
@@ -109,10 +115,27 @@ public class EnemyBehaviourWalking : MonoBehaviour
         {
             IsGrounded = true;
         }
-      
+     
+
         if (((1 << collision.gameObject.layer) & armLayer) != 0)
         {
             health = 0;
+        }
+
+        if (((1 << collision.gameObject.layer) & CarLayer) != 0)
+        {
+            health = 0;
+            rb.AddForce(Vector3.up *200, ForceMode.Impulse);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Dir"))
+        {
+            Quaternion otherRotation = other.gameObject.transform.rotation;
+
+            rb.transform.localRotation = otherRotation;
+
         }
     }
 }

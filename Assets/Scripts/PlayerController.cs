@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public bool IsAtk;
     private PlayerComboController playerComboController;
     public CamShake camShake;
-
+    public bool TpNow;
     public bool EnemieNearby = false;
     void Start()
     {
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
             StoreMousePosition();
             TeleportPlayerToStoredPosition();
             nextTeleportTime = Time.time + teleportCooldown;
-            camShake.TriggerSoftShake();
+          
         }
         if (IsAtk)
         {
@@ -53,14 +53,22 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("atk", false);
             rb.useGravity = true;
         }
+
+        if (TpNow)
+        {
+            playerComboController.lastAttackTime = 0;
+            TeleportPlayerToStoredPosition();
+            nextTeleportTime = Time.time + teleportCooldown;
+            camShake.TriggerSoftShake();
+            TpNow = false;
+        }
      
         animator.SetBool("isGrounded", isGrounded);
     }
 
     void StoreMousePosition()
     {
-        animator.Play("PlayerTeleport");
-        audioS.PlayOneShot(TpAudio);
+       
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -77,8 +85,9 @@ public class PlayerController : MonoBehaviour
 
     void TeleportPlayerToStoredPosition()
     {
-      
-
+        animator.Play("PlayerTeleport");
+        audioS.PlayOneShot(TpAudio);
+        camShake.TriggerSoftShake();
         if (EnemieNearby)
         {
             playerComboController.RotateTowardsEnemy();
@@ -103,6 +112,13 @@ public class PlayerController : MonoBehaviour
         tpEffect.SetActive(true);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Car"))
+        {
+            TpNow = true;
+        }
+    }
     void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
