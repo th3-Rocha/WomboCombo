@@ -30,6 +30,7 @@ public class EnemyBehaviourWalking : MonoBehaviour
         // Set random material from materials array
         SkinnedMeshRenderer skinnedMeshRenderer = model.GetComponent<SkinnedMeshRenderer>();
         int randomMaterialIndex = UnityEngine.Random.Range(0, materials.Length);
+
         skinnedMeshRenderer.material = materials[randomMaterialIndex];
 
         int randomValue = UnityEngine.Random.Range(1, 6);

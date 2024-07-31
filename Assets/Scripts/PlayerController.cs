@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public CamShake camShake;
     public bool TpNow;
     public bool EnemieNearby = false;
+    public GameObject tpOverlay3d;
+    public bool showTpOverlay;
     void Start()
     {
         audioS = GetComponent<AudioSource>();
@@ -64,6 +66,12 @@ public class PlayerController : MonoBehaviour
         }
      
         animator.SetBool("isGrounded", isGrounded);
+        if (showTpOverlay)
+        {
+            StoreMousePosition();
+            tpOverlay3d.transform.position = targetPosition;
+
+        }
     }
 
     void StoreMousePosition()
