@@ -10,6 +10,7 @@ public class CamShake : MonoBehaviour
     private Vector3 originalPosition;
     private float shakeDuration = 0f;
     private float shakeIntensity = 0f;
+    public bool isShaking = false;
 
     void Start()
     {
@@ -22,23 +23,35 @@ public class CamShake : MonoBehaviour
         {
             transform.localPosition = originalPosition + Random.insideUnitSphere * shakeIntensity;
             shakeDuration -= Time.deltaTime;
+            isShaking = true;
         }
-        else
+        else if (isShaking)
         {
             shakeDuration = 0f;
             transform.localPosition = originalPosition;
+            isShaking = false;
         }
     }
 
     public void TriggerSoftShake()
     {
-        shakeIntensity = softShakeIntensity;
-        shakeDuration = softShakeDuration;
+        if(!isShaking)
+        {
+
+            shakeIntensity = softShakeIntensity;
+            shakeDuration = softShakeDuration;
+            isShaking = true;
+
+        }
     }
 
     public void TriggerHardShake()
     {
-        shakeIntensity = hardShakeIntensity;
-        shakeDuration = hardShakeDuration;
+        if (!isShaking)
+        {
+            shakeIntensity = hardShakeIntensity;
+            shakeDuration = hardShakeDuration;
+            isShaking = true;
+        }
     }
 }

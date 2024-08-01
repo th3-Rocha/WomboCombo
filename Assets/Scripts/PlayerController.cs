@@ -21,57 +21,81 @@ public class PlayerController : MonoBehaviour
     public bool EnemieNearby = false;
     public GameObject tpOverlay3d;
     public bool showTpOverlay;
+    public Transform StartPos;
+    public bool InMoon;
     void Start()
     {
         audioS = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         playerComboController = GetComponent<PlayerComboController>();
+
+        if(InMoon) {
+            animator.SetBool("moon", true);
+            camShake.TriggerHardShake();
+            animator.Play("PlayerTeleport");
+            audioS.PlayOneShot(TpAudio);
+        }
+        else
+        {
+            targetPosition = StartPos.position;
+            TeleportPlayerToStoredPosition();
+        }
     }
 
     void Update()
     {
-        if (Time.time >= nextTeleportTime)
-        {
-            tpEffect.SetActive(false);
+        if (!InMoon) {
 
-        }
-        if (Input.GetMouseButtonDown(1) && Time.time >= nextTeleportTime)
-        {
-            playerComboController.lastAttackTime = 0;
-            StoreMousePosition();
-            TeleportPlayerToStoredPosition();
-            nextTeleportTime = Time.time + teleportCooldown;
-          
-        }
-        if (IsAtk)
-        {
-            rb.useGravity = true;
-            animator.Play("atackingPlayer");
-            animator.SetBool("atk", true);
+
+            if (Time.time >= nextTeleportTime)
+            {
+                tpEffect.SetActive(false);
+
+            }
+            if (Input.GetMouseButtonDown(1) && Time.time >= nextTeleportTime && !InMoon)
+            {
+                playerComboController.lastAttackTime = 0;
+                StoreMousePosition();
+                TeleportPlayerToStoredPosition();
+                nextTeleportTime = Time.time + teleportCooldown;
+
+            }
+            if (IsAtk)
+            {
+                rb.useGravity = true;
+                animator.Play("atackingPlayer");
+                animator.SetBool("atk", true);
+            }
+            else
+            {
+                animator.SetBool("atk", false);
+                rb.useGravity = true;
+            }
+
+            if (TpNow)
+            {
+                playerComboController.lastAttackTime = 0;
+                TeleportPlayerToStoredPosition();
+                nextTeleportTime = Time.time + teleportCooldown;
+                camShake.TriggerSoftShake();
+                TpNow = false;
+            }
+
+            animator.SetBool("isGrounded", isGrounded);
+            if (showTpOverlay)
+            {
+                StoreMousePosition();
+                tpOverlay3d.transform.position = targetPosition;
+
+            }
+
         }
         else
         {
-            animator.SetBool("atk", false);
-            rb.useGravity = true;
+            
         }
-
-        if (TpNow)
-        {
-            playerComboController.lastAttackTime = 0;
-            TeleportPlayerToStoredPosition();
-            nextTeleportTime = Time.time + teleportCooldown;
-            camShake.TriggerSoftShake();
-            TpNow = false;
-        }
-     
-        animator.SetBool("isGrounded", isGrounded);
-        if (showTpOverlay)
-        {
-            StoreMousePosition();
-            tpOverlay3d.transform.position = targetPosition;
-
-        }
+       
     }
 
     void StoreMousePosition()
